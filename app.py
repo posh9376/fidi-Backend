@@ -154,7 +154,7 @@ def create_todo():
     return jsonify({'message': 'Todo created successfully'}), 201
 
 @app.route('/todo/<int:todo_id>', methods=['DELETE'])
-@jwt_required
+@jwt_required()
 def delete_todo(todo_id):
     if not get_jwt_identity():
         return jsonify({'message': 'Unauthorized. No Token presesnt'}), 401
