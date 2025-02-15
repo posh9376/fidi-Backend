@@ -153,6 +153,19 @@ def create_todo():
     db.session.commit()
     return jsonify({'message': 'Todo created successfully'}), 201
 
+@app.route('/todo/<int:todo_id>', methods=['DELETE'])
+@jwt_required
+def delete_todo(todo_id):
+    if not get_jwt_identity():
+        return jsonify({'message': 'Unauthorized. No Token presesnt'}), 401
+    user_id = get_jwt_identity()
+    todo = TODO.query.filter_by(id=todo_id, user_id=user_id).first()
+    if not todo:
+        return jsonify({'message': 'Task not found'}), 404
+    db.session.delete(todo)
+    db.session.commit()
+    return jsonify({'message': 'Task deleted successfully'}), 200 
+
 @app.route('/notes', methods=['GET'])
 @jwt_required()
 def get_notes():
